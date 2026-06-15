@@ -16,6 +16,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_number',
+        'receipt_number',
         'status',
         'subtotal',
         'total',
@@ -23,6 +24,7 @@ class Order extends Model
         'shipping_phone',
         'shipping_address',
         'customer_note',
+        'confirmed_at',
     ];
 
     protected function casts(): array
@@ -31,6 +33,7 @@ class Order extends Model
             'subtotal' => 'decimal:2',
             'total' => 'decimal:2',
             'status' => OrderStatus::class,
+            'confirmed_at' => 'datetime',
         ];
     }
 

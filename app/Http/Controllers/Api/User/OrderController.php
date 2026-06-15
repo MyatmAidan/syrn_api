@@ -15,7 +15,7 @@ class OrderController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $orders = Order::with(['items.product', 'payment.paymentBank'])
+        $orders = Order::with(['items.product', 'payment.paymentBank', 'payment.reviewedBy', 'user'])
             ->where('user_id', $request->user()->user_id)
             ->orderByDesc('created_at')
             ->get();
@@ -33,7 +33,7 @@ class OrderController extends Controller
         return response()->json([
             'success' => true,
             'data' => new OrderResource(
-                $order->load(['items.product', 'payment.paymentBank'])
+                $order->load(['items.product', 'payment.paymentBank', 'payment.reviewedBy', 'user'])
             ),
         ]);
     }

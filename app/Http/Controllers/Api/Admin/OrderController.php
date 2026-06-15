@@ -34,7 +34,7 @@ class OrderController extends Controller
         return response()->json([
             'success' => true,
             'data' => new OrderResource(
-                $order->load(['items.product', 'payment.paymentBank', 'user'])
+                $order->load(['items.product', 'payment.paymentBank', 'payment.reviewedBy', 'user'])
             ),
         ]);
     }

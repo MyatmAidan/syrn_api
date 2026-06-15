@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Support\OrderReceiptHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,6 +14,7 @@ class OrderResource extends JsonResource
             'order_id' => $this->order_id,
             'user_id' => $this->user_id,
             'order_number' => $this->order_number,
+            'receipt_number' => $this->receipt_number,
             'status' => $this->status?->value ?? $this->status,
             'subtotal' => $this->subtotal,
             'total' => $this->total,
@@ -20,6 +22,7 @@ class OrderResource extends JsonResource
             'shipping_phone' => $this->shipping_phone,
             'shipping_address' => $this->shipping_address,
             'customer_note' => $this->customer_note,
+            'confirmed_at' => $this->confirmed_at,
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
             'payment' => new OrderPaymentResource($this->whenLoaded('payment')),
             'user' => $this->whenLoaded('user', fn () => [
@@ -27,6 +30,10 @@ class OrderResource extends JsonResource
                 'full_name' => $this->user->full_name,
                 'email' => $this->user->email,
             ]),
+            'receipt' => $this->when(
+                OrderReceiptHelper::isAvailable($this->resource),
+                fn () => OrderReceiptHelper::toArray($this->resource)
+            ),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

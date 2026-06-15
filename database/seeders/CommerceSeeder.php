@@ -26,7 +26,7 @@ class CommerceSeeder extends Seeder
             [
                 'bank_name' => 'KBZ Pay',
                 'account_name' => 'Syrn Cosmetics',
-                'account_number' => '09-123-456-789',
+                'account_number' => '09965135089',
                 'qr_image' => null,
                 'is_active' => true,
                 'sort_order' => 1,
@@ -34,7 +34,7 @@ class CommerceSeeder extends Seeder
             [
                 'bank_name' => 'AYA Pay',
                 'account_name' => 'Syrn Cosmetics',
-                'account_number' => '09-987-654-321',
+                'account_number' => '09987654321',
                 'qr_image' => null,
                 'is_active' => true,
                 'sort_order' => 2,

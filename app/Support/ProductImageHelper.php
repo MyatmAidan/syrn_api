@@ -12,8 +12,8 @@ class ProductImageHelper
     {
         $url = rtrim((string) config('app.url'), '/');
 
-        // Dev fallback when APP_URL is http://localhost but `php artisan serve` uses :8000
-        if (preg_match('#^https?://localhost$#i', $url)) {
+        // Dev fallback when APP_URL has no port but `php artisan serve` uses :8000
+        if (preg_match('#^https?://(localhost|127\.0\.0\.1)$#i', $url)) {
             return $url . ':8000';
         }
 
@@ -50,12 +50,12 @@ class ProductImageHelper
      */
     public static function normalizeAbsoluteUrl(string $url): string
     {
-        if (preg_match('#^https?://localhost/storage/#i', $url)) {
-            return preg_replace(
-                '#^https?://localhost#i',
-                self::storageBaseUrl(),
-                $url
-            ) ?? $url;
+        if (preg_match('#^https?://(localhost|127\.0\.0\.1)(:\d+)?/storage/#i', $url)) {
+            $path = parse_url($url, PHP_URL_PATH) ?? '';
+            $query = parse_url($url, PHP_URL_QUERY);
+            $suffix = $query ? '?' . $query : '';
+
+            return self::storageBaseUrl() . $path . $suffix;
         }
 
         return $url;

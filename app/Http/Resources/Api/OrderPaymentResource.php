@@ -22,6 +22,10 @@ class OrderPaymentResource extends JsonResource
                 : null,
             'status' => $this->status?->value ?? $this->status,
             'reviewed_by_admin_id' => $this->reviewed_by_admin_id,
+            'reviewed_by' => $this->whenLoaded('reviewedBy', fn () => [
+                'admin_id' => $this->reviewedBy->admin_id,
+                'admin_name' => $this->reviewedBy->admin_name,
+            ]),
             'admin_note' => $this->admin_note,
             'reviewed_at' => $this->reviewed_at,
             'created_at' => $this->created_at,

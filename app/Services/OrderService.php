@@ -136,9 +136,13 @@ class OrderService
                 'reviewed_at' => now(),
             ]);
 
-            $order->update(['status' => OrderStatus::Confirmed]);
+            $order->update([
+                'status' => OrderStatus::Confirmed,
+                'receipt_number' => $this->generateReceiptNumber(),
+                'confirmed_at' => now(),
+            ]);
 
-            return $order->fresh(['items.product', 'payment.paymentBank', 'user']);
+            return $order->fresh(['items.product', 'payment.paymentBank', 'payment.reviewedBy', 'user']);
         });
     }
 
@@ -167,6 +171,15 @@ class OrderService
         do {
             $number = 'SYRN-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
         } while (Order::where('order_number', $number)->exists());
+
+        return $number;
+    }
+
+    protected function generateReceiptNumber(): string
+    {
+        do {
+            $number = 'RCPT-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+        } while (Order::where('receipt_number', $number)->exists());
 
         return $number;
     }
